@@ -5,7 +5,7 @@ export default {
       LABEL: '#FE2472',
       INFO: '#00BCD4',
       ERROR: '#F44336',
-      SUCCESS: '#4CAF50',
+      success: '#2B8000',
       WARNING: '#FF9800',
       MUTED: '#979797',
       INPUT: '#DCDCDC',
