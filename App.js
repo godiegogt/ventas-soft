@@ -16,6 +16,9 @@ import {
   StatusBar,
 } from 'react-native';
 
+import { ThemeProvider } from 'react-native-elements';
+import {materialTheme} from './constants/'
+
 import LoginScreen from "./screens/LoginScreen"
 import AppStack from "./navigation/Screens";
 
@@ -33,6 +36,7 @@ import {
 const App = () => {
   const [userToken, setUserToken] = React.useState();
   return (
+    <ThemeProvider theme={materialTheme} >
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
       
@@ -42,6 +46,7 @@ const App = () => {
         
       </Stack.Navigator>
     </NavigationContainer>
+    </ThemeProvider>
   );
 };
 
