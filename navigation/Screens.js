@@ -115,7 +115,7 @@ function LoginStack(props) {
         drawerContentOptions={{
           activeTintColor: "white",
           inactiveTintColor: "#000",
-          activeBackgroundColor: materialTheme.COLORS.ACTIVE,
+          activeBackgroundColor: materialTheme.colors.primary,
           inactiveBackgroundColor: "transparent",
           itemStyle: {
             width: width * 0.74,

@@ -39,10 +39,15 @@ const App = () => {
     <ThemeProvider theme={materialTheme} >
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-      
-          <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+      {
+        userToken!=null
+        ?<Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+        :<Stack.Screen  name="AppStack" component={AppStack} />
+
+      }
           
-          <Stack.Screen  name="AppStack" component={AppStack} />
+          
+          
         
       </Stack.Navigator>
     </NavigationContainer>
