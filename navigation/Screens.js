@@ -29,21 +29,10 @@ const profile = {
 
 function SellStack(props) {
     return (
-      <Stack.Navigator mode="card" headerMode="screen">
+      <Stack.Navigator mode="card">
         <Stack.Screen 
           name="Seller"
           component={SellerScreen}
-          /*options={{
-            header: ({ navigation, scene }) => (
-              <Header 
-                search
-                tabs
-                title="Home"
-                navigation={navigation}
-                scene={scene}
-              />
-            )
-          }}*/
         />
         <Stack.Screen 
           name="Checkin"
@@ -65,48 +54,27 @@ function LoginStack(props) {
             <Stack.Screen
                 name="Login"
                 component={LoginScreen}
-            /*options={{
-              header: ({ navigation, scene }) => (
-                <Header 
-                  search
-                  tabs
-                  title="Home"
-                  navigation={navigation}
-                  scene={scene}
-                />
-              )
-            }}*/
             />
         </Stack.Navigator>
     );
 }
-  /*
-  function SellsStack(props) {
-    return (
+
+function SellsStack(props) {
+  return (
       <Stack.Navigator mode="card" headerMode="screen">
-        <Stack.Screen 
-          name="Sells"
-          component={SellsScreen}
-          options={{
-            header: ({ navigation, scene }) => (
-              <Header 
-                search
-                tabs
-                title="Home"
-                navigation={navigation}
-                scene={scene}
-              />
-            )
-          }}
-        />
+          <Stack.Screen
+              name="Sells"
+              component={SellsScreen}
+          />
       </Stack.Navigator>
-    );
-  }*/
+  );
+}
 
   export default function AppStack(props) {
     return (
       <Drawer.Navigator
         style={{ flex: 1 }}
+        
         
         drawerStyle={{
           backgroundColor: "white",
@@ -132,34 +100,15 @@ function LoginStack(props) {
           }
         }}
         initialRouteName="Sell"
+        
       >
         <Drawer.Screen
           name="Sell"
           component={SellStack}
-          /*options={{
-            drawerIcon: ({ focused }) => (
-              <Icon
-                size={16}
-                name="shop"
-                family="GalioExtra"
-                color={focused ? "white" : materialTheme.COLORS.MUTED}
-              />
-            )
-          }}*/
         />
         <Drawer.Screen
           name="Sells"
-          component={SelllsScreen}
-          /*options={{
-            drawerIcon: ({ focused }) => (
-              <Icon
-                size={16}
-                name="shop"
-                family="GalioExtra"
-                color={focused ? "white" : materialTheme.COLORS.MUTED}
-              />
-            )
-          }}*/
+          component={SellsStack}
         />
       </Drawer.Navigator>
     );
