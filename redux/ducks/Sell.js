@@ -63,6 +63,8 @@ export default function sellReducer(state = dataInicial, action) {
 }
 
 export const addProductAction = (product,amount) => (dispatch) => {
+    console.log("product");
+    console.log(product);
 
     dispatch({
         type: ADD_PRODUCTS,

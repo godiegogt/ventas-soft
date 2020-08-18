@@ -9,6 +9,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { materialTheme } from "../constants/";
 import { useDispatch, useSelector } from 'react-redux'
 
+    //Import actions
+    import { addCustomerAction } from "../redux/ducks/Customer";
+
 const PROP = [
 	{
 		key: 'samsung',
@@ -29,14 +32,30 @@ const PROP = [
 ];
 
 const CheckinScreen = ({navigation}) => {
-    const [search, setSearch] = React.useState();
+   
     const [paymentstate, setpaymentstate] = React.useState();
     const [deliverystate, setdeliverystate] = React.useState();
     const [paymentype, setpaymentype] = React.useState();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [customerSelected, setCustomerSelected] = React.useState('')
-    let customers=useSelector(state => state.customer.allCustomers);
     
+    
+    //Inf Customer
+    const [name, setName] = React.useState('1');
+    const [DPI, setDPI] = React.useState('2');
+    const [NIT, setNIT] = React.useState('3');
+    const [adress, setAdress] = React.useState('4');
+    const [phone, setPhone] = React.useState('5');
+    const [search,setSearch]=React.useState();
+    let [searchdata,setSearchdata]=React.useState();
+
+    //Initilization of dispatch from redux
+    const dispatch=useDispatch();
+
+    //Selectors 
+    let customers=useSelector(state => state.customer.allCustomers);
+
+
 
     // React.useEffect(()=>{
 
@@ -58,10 +77,32 @@ const CheckinScreen = ({navigation}) => {
         return unsubscribe;
       }, [navigation]);
 
+      const searchfunction = (search) => {
+        setSearch(search);
+        if (search==='') {
+            setSearchdata([]);
+            return
+        }
+        setSearchdata(
+            customers.filter(function (data) {
+                return data.name.toLowerCase().includes(search.toLowerCase()) 
+
+            })
+        );
+
+    }
+
       const changeCustomer=(id)=>{
 
         setCustomerSelected(id)
           
+      }
+
+      const createCustomer=()=>{
+          const customer={name,DPI,NIT,phone,adress}
+
+          dispatch(addCustomerAction(customer))
+          setModalVisible(false) 
       }
 
     return (
@@ -71,7 +112,7 @@ const CheckinScreen = ({navigation}) => {
                 <SearchBar
                     placeholder="NIT"
                     containerStyle={{ width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' }}
-                    onChangeText={(search) => setSearch(search)}
+                    onChangeText={(search)=>searchfunction(search)}
                     inputStyle={{ color: '#777', fontSize: 16 }}
                     lightTheme={true}
                     value={search}
@@ -93,12 +134,14 @@ const CheckinScreen = ({navigation}) => {
                     }
                     title="Agregar cliente"
                 />
-                <RadioButtonCustomers 
-                customers={customers} 
+
+                {searchdata?<RadioButtonCustomers 
+                customers={searchdata} 
                 valueSelected={changeCustomer}
-                />
+                />: <Text style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold', color: '#777' }}>No hay resultados en su búsqueda.</Text>}
+
                 <Text>{customerSelected}</Text>
-                <Text style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold', color: '#777' }}>No hay resultados en su búsqueda.</Text>
+               
                 <Input
                     placeholder='Número de fáctura'
                     inputStyle={{ color: '#777', fontSize: 16 }}
@@ -173,29 +216,35 @@ const CheckinScreen = ({navigation}) => {
                 <View style={{ flex: 1, backgroundColor: '#fff', padding: 20, maxHeight: 500,borderRadius: 20 }}>
                     <Text style={{ fontSize: 18, color: '#555', fontWeight: 'bold' }}>Crear nuevo cliente</Text>
                     <Input
-                        inputStyle={{fontSize:18}}
+                        
                         placeholder='Nombre completo'
                         inputStyle={{ color: '#777', fontSize: 18 }}
+                        onChangeText={(name)=>{setName(name)}}
 
                     />
+                   
                     <Input
                         placeholder='NIT'
                         inputStyle={{ color: '#777', fontSize: 18 }}
+                        onChangeText={(NIT)=>{setNIT(NIT)}}
 
                     />
                     <Input
                         placeholder='DPI'
                         inputStyle={{ color: '#777', fontSize: 18 }}
+                        onChangeText={(DPI)=>{setDPI(DPI)}}
 
                     />
                     <Input
                         placeholder='Dirección'
                         inputStyle={{ color: '#777', fontSize: 18 }}
+                        onChangeText={(adress)=>{setAdress(adress)}}
 
                     />
                     <Input
                         placeholder='Teléfono o celular'
                         inputStyle={{ color: '#777', fontSize: 18 }}
+                        onChangeText={(phone)=>{setPhone(phone)}}
 
                     />
                     <View style={{ position: 'absolute', right: 10, top: 10 }}>
@@ -213,7 +262,7 @@ const CheckinScreen = ({navigation}) => {
                     </View>
                     <Button
 
-                        onPress={() => { console.log('Presionado'); setModalVisible(false) }}
+                        onPress={() => { createCustomer() }}
 
                         buttonStyle={{ borderRadius: 10 }}
                         icon={
@@ -254,21 +303,13 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     card: {
-        borderRadius: 10,
+      
         padding: 15,
         width: '100%',
-        shadowColor: "#000",
+   
         backgroundColor: '#fff',
-        shadowOffset: {
-            width: 1,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        elevation: 10,
-        marginBottom: 18,
-        marginTop: 10
+       
+ 
     },
     container: {
         flex: 1,
