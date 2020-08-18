@@ -18,7 +18,7 @@ export const RadioButtonCustomers = ({ customers, valueSelected }) => {
 						}}
 					>
 						<View key={res.id} style={styles.container}>
-							<Text style={styles.radioText}>{res.name}</Text>
+					<Text style={styles.radioText}>Nombre:{res.name}/NIT:{res.NIT}</Text>
 							<View
 								style={styles.radioCircle}
 								onPress={() => {

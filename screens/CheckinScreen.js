@@ -33,11 +33,14 @@ const PROP = [
 
 const CheckinScreen = ({navigation}) => {
    
-    const [paymentstate, setpaymentstate] = React.useState();
-    const [deliverystate, setdeliverystate] = React.useState();
-    const [paymentype, setpaymentype] = React.useState();
+    const [paymentstate, setpaymentstate] = React.useState('Credito');
+    const [deliverystate, setdeliverystate] = React.useState('Entregado');
+    const [paymentype, setpaymentype] = React.useState('Efectivo');
     const [modalVisible, setModalVisible] = React.useState(false);
     const [customerSelected, setCustomerSelected] = React.useState('')
+    const [invoiceNo, setInvoiceNo] = React.useState('')
+    const [cash, setCash] = React.useState('');
+    const [descount, setDescount] = React.useState('');
     
     
     //Inf Customer
@@ -48,22 +51,42 @@ const CheckinScreen = ({navigation}) => {
     const [phone, setPhone] = React.useState('5');
     const [search,setSearch]=React.useState();
     let [searchdata,setSearchdata]=React.useState();
+    let [total,setTotal]=React.useState();
 
     //Initilization of dispatch from redux
     const dispatch=useDispatch();
 
     //Selectors 
     let customers=useSelector(state => state.customer.allCustomers);
+    let products=useSelector(state => state.sell.products);
 
 
 
-    // React.useEffect(()=>{
+     React.useEffect(()=>{
+
+        calcTotal();
 
 
 
+     },[]);
 
+     React.useEffect(() => {
+       
+        calcTotal();
+      
+    }, [products]);
 
-    // },[])
+    const calcTotal=()=>{
+        console.log("Store:")
+        console.log(products);
+        let temp=0;
+        products.map((item)=>{
+            temp=temp+item.price_in*item.amount;
+
+        });
+        setTotal(temp);
+    }
+
 
 
     React.useEffect(() => {
@@ -103,6 +126,18 @@ const CheckinScreen = ({navigation}) => {
 
           dispatch(addCustomerAction(customer))
           setModalVisible(false) 
+      }
+
+      const createSell=()=>{
+        console.log(invoiceNo);
+          console.log(paymentstate);
+          console.log(deliverystate);
+          console.log(paymentype);
+          console.log(customerSelected);
+          console.log(cash);
+          console.log(descount);
+          console.log(products);
+        //navigation.navigate('Seller');
       }
 
     return (
@@ -145,6 +180,7 @@ const CheckinScreen = ({navigation}) => {
                 <Input
                     placeholder='Número de fáctura'
                     inputStyle={{ color: '#777', fontSize: 16 }}
+                    onChangeText={(invoiceNo)=>{setInvoiceNo(invoiceNo)}}
                 />
 
                 <Picker
@@ -183,6 +219,7 @@ const CheckinScreen = ({navigation}) => {
                         <Input
                             placeholder='0%'
                             inputStyle={{ color: '#777', fontSize: 16 }}
+                            onChangeText={(descount)=>{setDescount(descount)}}
 
                         />
                     </View>
@@ -191,16 +228,17 @@ const CheckinScreen = ({navigation}) => {
                         <Input
                             placeholder='Q 0.00'
                             inputStyle={{ color: '#777', fontSize: 16 }}
+                            onChangeText={(cash)=>{setCash(cash)}}
 
                         />
                     </View>
 
                 </View>
 
-                <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 16, color: '#777', fontWeight: 'bold' }}>Total: Q 10, 000</Text>
+                <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 16, color: '#777', fontWeight: 'bold' }}>Total: Q {total}</Text>
                 <Button
                     onPress={() => {
-                        navigation.navigate('Seller');
+                        createSell();
                     }}
                     title="Finalizar venta"
                     buttonStyle={{ backgroundColor: materialTheme.colors.success, borderRadius: 5, marginBottom: 40 }}
