@@ -24,6 +24,10 @@ import AppStack from "./navigation/Screens";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Provider } from 'react-redux';
+
+import { useDispatch, useSelector} from 'react-redux'
+
 const Stack = createStackNavigator();
 import {
   Header,
@@ -32,35 +36,59 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import generateStore from './redux/Store'
+
+const AppWrapper = () => {
+  const store = generateStore();
+
+  return (
+    <Provider store={store}>
+      <App /> 
+    </Provider>
+  )
+}
+
+
+
+
 
 const App = () => {
-  const [userToken, setUserToken] = React.useState();
+
+
+  const isLogin = useSelector(state => state.user.activo)
+
+React.useEffect(() => {
+  console.log(isLogin);
+}, [])
+
+
+
   return (
-    <ThemeProvider theme={materialTheme} >
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Login"
-          headerMode='none'
-          screenOptions={{
-            navigationOptions: {
-              headerShown: false,
+   
+     
+        <ThemeProvider theme={materialTheme} >
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Login"
+            headerMode='none'
+            screenOptions={{
+              navigationOptions: {
+                headerShown: false,
+              }
+            }}
+          >
+
+            {
+              !isLogin
+                ? <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+                : <Stack.Screen name="AppStack" component={AppStack} />
+
             }
-          }}
-        >
-
-          {
-            userToken != null
-              ? <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-              : <Stack.Screen name="AppStack" component={AppStack} />
-
-          }
-
-
-
-
-        </Stack.Navigator>
-      </NavigationContainer>
-    </ThemeProvider>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+    
+  
   );
 };
 
@@ -103,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default AppWrapper;

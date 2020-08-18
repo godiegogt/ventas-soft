@@ -2,11 +2,31 @@ import React from 'react'
 import { StyleSheet, Text, View, ScrollView, Picker,TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
 
-
+import RadioButton,{RadioButtonCustomers}  from '../components/elements/RadioButton'
 
 import { SearchBar, Input, Button } from 'react-native-elements'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { materialTheme } from "../constants/";
+import { useDispatch, useSelector } from 'react-redux'
+
+const PROP = [
+	{
+		key: 'samsung',
+		text: 'Samsung',
+	},
+	{
+		key: 'apple',
+		text: 'Apple',
+	},
+	{
+		key: 'motorola',
+		text: 'Motorola',
+	},
+	{
+		key: 'lenovo',
+		text: 'Lenovo',
+  },
+];
 
 const CheckinScreen = ({navigation}) => {
     const [search, setSearch] = React.useState();
@@ -14,15 +34,36 @@ const CheckinScreen = ({navigation}) => {
     const [deliverystate, setdeliverystate] = React.useState();
     const [paymentype, setpaymentype] = React.useState();
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [customerSelected, setCustomerSelected] = React.useState('')
+    let customers=useSelector(state => state.customer.allCustomers);
+    
+
+    // React.useEffect(()=>{
+
+
+
+
+
+    // },[])
+
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
           // Screen was focused
           // Do something
         });
+        console.log("CUstomers:")
+        console.log(customers)
     
         return unsubscribe;
       }, [navigation]);
+
+      const changeCustomer=(id)=>{
+
+        setCustomerSelected(id)
+          
+      }
+
     return (
         <View style={{ width: '100%' }}>
             <ScrollView style={styles.card}>
@@ -52,6 +93,11 @@ const CheckinScreen = ({navigation}) => {
                     }
                     title="Agregar cliente"
                 />
+                <RadioButtonCustomers 
+                customers={customers} 
+                valueSelected={changeCustomer}
+                />
+                <Text>{customerSelected}</Text>
                 <Text style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold', color: '#777' }}>No hay resultados en su búsqueda.</Text>
                 <Input
                     placeholder='Número de fáctura'

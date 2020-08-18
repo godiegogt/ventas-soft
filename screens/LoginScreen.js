@@ -1,10 +1,28 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { useDispatch, useSelector } from 'react-redux'
+
+import {loginAction} from '../redux/ducks/User'
+
 
 import { Input, Button } from 'react-native-elements';
 
 const LoginScreen = ({ navigation }) => {
+
+const [user,setUser]=React.useState();
+const [pass,setPass]=React.useState();
+const dispatch=useDispatch();
+const isLogin = useSelector(state => state.user.usererror)
+
+const login=()=>{
+console.log(pass);
+console.log(user);
+//loginAction(user,pass);
+dispatch(loginAction(user,pass));
+
+}
+
     return (
         <View style={styles.container}>
             <Image
@@ -14,6 +32,7 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.formLogin}>
                 <Input
                     placeholder='Ingrese su usuario'
+                    onChangeText={(user)=>setUser(user)}
                     leftIcon={
                         <Icon
                             name='user'
@@ -22,11 +41,14 @@ const LoginScreen = ({ navigation }) => {
                         />
                     }
                 />
-
+               
+               <Text>{JSON.stringify(user)}</Text>
                 <Input
                     placeholder='Ingrese su contraseña'
                     inputStyle={{'color': 'red'}}
                     containerStyle={{color:'#000'}}
+                    onChangeText={pass=>setPass(pass)}
+                    
                     
                     leftIcon={
                         <Icon 
@@ -36,12 +58,14 @@ const LoginScreen = ({ navigation }) => {
                         />
                     }
                 />
+               
                 <Button
                     raised
                     title="Login"
                     containerStyle={{width:'100%',backgroundColor:'#000'}}
                     backgroundColor={"#000"}
                     inputStyle={{'color': 'red'}}
+                    onPress={()=>login()}
                 />
             </View>
 
