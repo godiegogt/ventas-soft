@@ -1,8 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, Picker,TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
+import axios from 'axios'
 
+//Import elements
 import RadioButton,{RadioButtonCustomers}  from '../components/elements/RadioButton'
+import Alert from '../components/elements/Alert'
 
 import { SearchBar, Input, Button } from 'react-native-elements'
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -11,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
     //Import actions
     import { addCustomerAction } from "../redux/ducks/Customer";
+    import {createSellAction} from "../redux/ducks/Sell";
 
 const PROP = [
 	{
@@ -33,21 +37,23 @@ const PROP = [
 
 const CheckinScreen = ({navigation}) => {
    
-    const [paymentstate, setpaymentstate] = React.useState('Credito');
-    const [deliverystate, setdeliverystate] = React.useState('Entregado');
-    const [paymentype, setpaymentype] = React.useState('Efectivo');
+    const [paymentstate, setpaymentstate] = React.useState(1);
+    const [deliverystate, setdeliverystate] = React.useState(1);
+    const [paymentype, setpaymentype] = React.useState(1);
     const [modalVisible, setModalVisible] = React.useState(false);
-    const [customerSelected, setCustomerSelected] = React.useState('')
+    const [customerSelected, setCustomerSelected] = React.useState({})
     const [invoiceNo, setInvoiceNo] = React.useState('')
     const [cash, setCash] = React.useState('');
     const [descount, setDescount] = React.useState('');
+
+    const [modalAlert,setModalAlert]=React.useState(false);
     
     
     //Inf Customer
     const [name, setName] = React.useState('1');
     const [DPI, setDPI] = React.useState('2');
     const [NIT, setNIT] = React.useState('3');
-    const [adress, setAdress] = React.useState('4');
+    const [address, setAddress] = React.useState('4');
     const [phone, setPhone] = React.useState('5');
     const [search,setSearch]=React.useState();
     let [searchdata,setSearchdata]=React.useState();
@@ -59,6 +65,7 @@ const CheckinScreen = ({navigation}) => {
     //Selectors 
     let customers=useSelector(state => state.customer.allCustomers);
     let products=useSelector(state => state.sell.products);
+    let user=useSelector(state => state.user);
 
 
 
@@ -81,7 +88,7 @@ const CheckinScreen = ({navigation}) => {
         console.log(products);
         let temp=0;
         products.map((item)=>{
-            temp=temp+item.price_in*item.amount;
+            temp=temp+item.price_out*item.amount;
 
         });
         setTotal(temp);
@@ -101,6 +108,9 @@ const CheckinScreen = ({navigation}) => {
       }, [navigation]);
 
       const searchfunction = (search) => {
+          console.log('CUstomer selected:');
+          console.log(customerSelected);
+        setCustomerSelected({});
         setSearch(search);
         if (search==='') {
             setSearchdata([]);
@@ -115,21 +125,24 @@ const CheckinScreen = ({navigation}) => {
 
     }
 
-      const changeCustomer=(id)=>{
+      const changeCustomer=(customer)=>{
 
-        setCustomerSelected(id)
+        setCustomerSelected(customer)
           
       }
 
-      const createCustomer=()=>{
-          const customer={name,DPI,NIT,phone,adress}
+      const createCustomer= ()=>{
+          const customer={name,DPI,NIT,phone,address}
 
           dispatch(addCustomerAction(customer))
           setModalVisible(false) 
       }
 
-      const createSell=()=>{
-        console.log(invoiceNo);
+      const createSell=async ()=>{
+      
+
+        if(invoiceNo!=='' && paymentstate!=='' && deliverystate!=='' && paymentype!=='' && customerSelected!=={} && products!=[]){
+            console.log(invoiceNo);
           console.log(paymentstate);
           console.log(deliverystate);
           console.log(paymentype);
@@ -137,8 +150,43 @@ const CheckinScreen = ({navigation}) => {
           console.log(cash);
           console.log(descount);
           console.log(products);
+
+          const sell={
+            customerSelected,
+            products,
+            user,
+            
+            invoiceData:{
+                invoiceNo,
+                paymentstate,
+                deliverystate,
+                paymentype,
+                cash,
+                descount,
+                total
+            },
+            
+            
+          }
+
+          dispatch(createSellAction(sell));
+
+
+
+        }else{
+            changeModalAlert();
+        }
+
+
+        
         //navigation.navigate('Seller');
       }
+
+      //Set alert modal
+      const changeModalAlert=()=>{
+          setModalAlert(!modalAlert);
+      }
+
 
     return (
         <View style={{ width: '100%' }}>
@@ -173,9 +221,10 @@ const CheckinScreen = ({navigation}) => {
                 {searchdata?<RadioButtonCustomers 
                 customers={searchdata} 
                 valueSelected={changeCustomer}
+                selected={customerSelected}
                 />: <Text style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold', color: '#777' }}>No hay resultados en su búsqueda.</Text>}
 
-                <Text>{customerSelected}</Text>
+                
                
                 <Input
                     placeholder='Número de fáctura'
@@ -188,20 +237,20 @@ const CheckinScreen = ({navigation}) => {
                     style={{ borderWidth: 4, borderColor: '#f7f7f7' }}
                     onValueChange={(itemValue, itemIndex) => setpaymentstate(itemValue)}
                 >
-                    <Picker.Item label="Pagado" value="Pagado" />
-                    <Picker.Item label="Pendiente" value="Pendiente" />
-                    <Picker.Item label="Cancelado" value="Cacelado" />
-                    <Picker.Item label="Credito" value="Credito" />
+                    <Picker.Item label="Pagado" value={1} />
+                    <Picker.Item label="Pendiente" value={2} />
+                    <Picker.Item label="Cancelado" value={3} />
+                    <Picker.Item label="Credito" value={4} />
                 </Picker>
 
                 <Picker
                     selectedValue={deliverystate}
                     style={{ borderWidth: 4, borderColor: '#f7f7f7' }}
-                    onValueChange={(itemValue, itemIndex) => setdeliverystate(itemValue)}
+                    onValueChange={(itemValue, itemIndex) => setpaymentype(itemValue)}
                 >
-                    <Picker.Item label="Entregado" value="Entregado" />
-                    <Picker.Item label="Pendiente" value="Pendiente" />
-                    <Picker.Item label="Cancelado" value="Cacelado" />
+                    <Picker.Item label="Entregado" value={1} />
+                    <Picker.Item label="Pendiente" value={2} />
+                    <Picker.Item label="Cancelado" value={3} />
                 </Picker>
 
                 <Picker
@@ -209,9 +258,9 @@ const CheckinScreen = ({navigation}) => {
 
                     onValueChange={(itemValue, itemIndex) => setdeliverystate(itemValue)}
                 >
-                    <Picker.Item label="Efectivo" value="Efectivo" />
-                    <Picker.Item label="Deposito" value="Deposito" />
-                    <Picker.Item label="Cheque" value="Cheque" />
+                    <Picker.Item label="Efectivo" value={1} />
+                    <Picker.Item label="Deposito" value={2} />
+                    <Picker.Item label="Cheque" value={3} />
                 </Picker>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
@@ -250,6 +299,8 @@ const CheckinScreen = ({navigation}) => {
 
             </ScrollView>
 
+            <Alert modalAlert={modalAlert} changeModalAlert={changeModalAlert} />
+
             <Modal isVisible={modalVisible}>
                 <View style={{ flex: 1, backgroundColor: '#fff', padding: 20, maxHeight: 500,borderRadius: 20 }}>
                     <Text style={{ fontSize: 18, color: '#555', fontWeight: 'bold' }}>Crear nuevo cliente</Text>
@@ -276,7 +327,7 @@ const CheckinScreen = ({navigation}) => {
                     <Input
                         placeholder='Dirección'
                         inputStyle={{ color: '#777', fontSize: 18 }}
-                        onChangeText={(adress)=>{setAdress(adress)}}
+                        onChangeText={(address)=>{setAddress(address)}}
 
                     />
                     <Input

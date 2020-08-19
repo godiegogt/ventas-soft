@@ -54,7 +54,7 @@ const Product=({item})=>{
             </View>
             <View style={styles.cardListItem}>
                 <Text style={styles.cardListText}>
-                    Precio unitario: Q {item.price_in}
+                    Precio unitario: Q {item.price_out}
                 </Text>
             </View>
             <View style={styles.cardListItem}>
@@ -95,7 +95,7 @@ const Product=({item})=>{
 
 
         </View>
-            <Text  h4 style={{alignSelf:'flex-end'}}> Subtotal: Q {item.price_in*amount}</Text>
+            <Text  h4 style={{alignSelf:'flex-end'}}> Subtotal: Q {item.price_out*amount}</Text>
     </View>
     )
 }
@@ -123,7 +123,7 @@ const DetailSell=({item})=>{
                 </Text>
             </Text>
             <Text style={{color:materialTheme.colors.primary}}>
-            Q {item.price_in*item.amount}
+            Q {item.price_out*item.amount}
             </Text>
         </View>
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -183,7 +183,7 @@ const SellerScreen = ({ navigation }) => {
         console.log(productsdetaildata.products);
         let temp=0;
         productsdetaildata.products.map((item)=>{
-            temp=temp+item.price_in*item.amount;
+            temp=temp+item.price_out*item.amount;
 
         });
         setTotal(temp);

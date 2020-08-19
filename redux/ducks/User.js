@@ -4,7 +4,7 @@ import axios from 'axios'
 const dataInicial = {
     loading: false,
     activo: true,
-    user: {},
+    user_id:1,
     user_error:''
 }
 

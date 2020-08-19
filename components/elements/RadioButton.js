@@ -3,17 +3,24 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { materialTheme } from '../../constants/'
 
 
-export const RadioButtonCustomers = ({ customers, valueSelected }) => {
+export const RadioButtonCustomers = ({ customers, valueSelected,selected}) => {
 	const [value, setvalue] = React.useState('');
+
+	React.useEffect(() => {
+		console.log('Se cambio el cliente');
+	console.log(selected);
+	}, [selected])
+
 
 	return (
 
 		<View>
+			
 			{customers.map(res => {
 				return (
 					<TouchableOpacity
 						onPress={() => {
-							valueSelected(res.id);
+							valueSelected(res);
 							setvalue(res.id)
 						}}
 					>
@@ -22,17 +29,18 @@ export const RadioButtonCustomers = ({ customers, valueSelected }) => {
 							<View
 								style={styles.radioCircle}
 								onPress={() => {
-									valueSelected(res.id);
+									valueSelected(res);
 									setvalue(res.id)
 								}}>
-								{value === res.id && <View style={styles.selectedRb} />}
+								{selected.id == res.id && <View style={styles.selectedRb} />}
+								
 							</View>
 						</View>
 					</TouchableOpacity>
 
 				);
 			})}
-			<Text> Selected: {value} </Text>
+		
 		</View>
 
 	)

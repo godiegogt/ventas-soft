@@ -33,6 +33,7 @@ const dataInicial = {
 const LOADING = 'LOADING'
 const ADD_PRODUCTS = 'ADD_PRODUCTS'
 const DELETE_PRODUCTS = 'DELETE_PRODUCTS'
+const SUCCESS_SELL = 'SUCCESS_SELL'
 
 export default function sellReducer(state = dataInicial, action) {
 
@@ -55,10 +56,37 @@ export default function sellReducer(state = dataInicial, action) {
                 products: state.products.filter(item=>item.uuid !== action.payload)
             }
         }
+        case SUCCESS_SELL: {
+            return {
+                ...state
+            }
+        }
 
         default:
             return { ...state }
     }
+
+}
+
+export const createSellAction=  (sell)=> async (dispatch)=>{
+
+    await axios.post(`http://elangel.tendigt.com/?action=sell`, sell)
+    .then(res => {
+        console.log("Axios");
+      //console.log(res);
+      console.log(res.data);
+
+      dispatch({
+        type: SUCCESS_SELL,
+        payload: res.data
+    })
+     
+      
+    })
+
+   
+
+
 
 }
 
