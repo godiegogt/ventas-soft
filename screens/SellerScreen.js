@@ -178,6 +178,17 @@ const SellerScreen = ({ navigation }) => {
       
     }, [productsdetaildata.products]);
 
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+           //productsdetaildata = useSelector(state => state.sell);
+          // Do something
+          setSearch([]);
+        });
+        
+    
+        return unsubscribe;
+      }, [navigation]);
+
     const calcTotal=()=>{
         console.log("Store:")
         console.log(productsdetaildata.products);

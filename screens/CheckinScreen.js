@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
     //Import actions
     import { addCustomerAction } from "../redux/ducks/Customer";
-    import {createSellAction} from "../redux/ducks/Sell";
+    import {createSellAction,clearProductsAction} from "../redux/ducks/Sell";
 
 const PROP = [
 	{
@@ -45,6 +45,7 @@ const CheckinScreen = ({navigation}) => {
     const [invoiceNo, setInvoiceNo] = React.useState('')
     const [cash, setCash] = React.useState('');
     const [descount, setDescount] = React.useState('');
+    const [isSuccess, setIsSuccess] = React.useState(false);
 
     const [modalAlert,setModalAlert]=React.useState(false);
     
@@ -84,8 +85,7 @@ const CheckinScreen = ({navigation}) => {
     }, [products]);
 
     const calcTotal=()=>{
-        console.log("Store:")
-        console.log(products);
+      
         let temp=0;
         products.map((item)=>{
             temp=temp+item.price_out*item.amount;
@@ -101,15 +101,13 @@ const CheckinScreen = ({navigation}) => {
           // Screen was focused
           // Do something
         });
-        console.log("CUstomers:")
-        console.log(customers)
+       
     
         return unsubscribe;
       }, [navigation]);
 
       const searchfunction = (search) => {
-          console.log('CUstomer selected:');
-          console.log(customerSelected);
+        
         setCustomerSelected({});
         setSearch(search);
         if (search==='') {
@@ -142,14 +140,7 @@ const CheckinScreen = ({navigation}) => {
       
 
         if(invoiceNo!=='' && paymentstate!=='' && deliverystate!=='' && paymentype!=='' && customerSelected!=={} && products!=[]){
-            console.log(invoiceNo);
-          console.log(paymentstate);
-          console.log(deliverystate);
-          console.log(paymentype);
-          console.log(customerSelected);
-          console.log(cash);
-          console.log(descount);
-          console.log(products);
+
 
           const sell={
             customerSelected,
@@ -169,7 +160,13 @@ const CheckinScreen = ({navigation}) => {
             
           }
 
-          dispatch(createSellAction(sell));
+         // dispatch(createSellAction(sell));
+          //Liampiamos el carro ce compra
+          dispatch(clearProductsAction());
+          setIsSuccess(true);
+          console.log("Productos:");
+          console.log(products);
+          
 
 
 
@@ -185,6 +182,11 @@ const CheckinScreen = ({navigation}) => {
       //Set alert modal
       const changeModalAlert=()=>{
           setModalAlert(!modalAlert);
+      }
+
+      const completeProcess=()=>{
+          setIsSuccess(false);
+          navigation.navigate('Seller');
       }
 
 
@@ -339,7 +341,7 @@ const CheckinScreen = ({navigation}) => {
                     <View style={{ position: 'absolute', right: 10, top: 10 }}>
                         <TouchableOpacity
                             style={{padding:10}}
-                            onPress={() => { console.log('Presionado'); setModalVisible(false) }}>
+                            onPress={() => {setModalVisible(false) }}>
                             <Icon
                                 name="times"
                                 size={20}
@@ -363,6 +365,28 @@ const CheckinScreen = ({navigation}) => {
                             />
                         }
                         title="Crear cliente"
+                    />
+
+                </View>
+
+            </Modal>
+
+            <Modal isVisible={isSuccess}>
+                <View style={{ flex: 1, backgroundColor: '#fff', padding: 20, maxHeight: 200, borderRadius: 20,justifyContent:'center',alignItems:'center' }}>
+                    <Icon
+                        name="check-circle"
+                        size={60}
+                        color={materialTheme.colors.success}
+                        marginBottom={40}
+                    />
+
+                    <Text style={{ fontSize: 16, color: '#555', fontWeight: 'bold' }}>¡Se ha creado con éxito la venta!</Text>
+
+                    <Button
+                        onPress={() => { completeProcess() }}
+                        buttonStyle={{ borderRadius: 10 }}
+                        title="Ok"
+                        containerStyle={{width:'80%'}}
                     />
 
                 </View>

@@ -2,7 +2,7 @@ import axios from 'axios'
 //Initial data
 const dataInicial = {
     loading: false,
-    allCustomers: [{ "name": "Diego Argueta", "lastname": "Medina", "email": "", "image": null, "password": "", "created_at": "2020-06-28 23:12:05", "credit_limit": "0", "id": "0", "no": "c\/f", "company": null, "address1": "Ciudad", "address2": null, "phone1": " ", "phone2": null, "email1": " ", "email2": null, "is_active_access": "0", "has_credit": "0", "kind": "1" }]
+    allCustomers: []
 }
 
 const LOADING = 'LOADING'
@@ -20,7 +20,7 @@ console.log(action.payload)
 
             return {
                 ...state,
-                allCustomers: [...state.allCustomers, ...action.payload]
+                allCustomers: [...action.payload]
             }
         case ADD_CUSTOMER:
             return {

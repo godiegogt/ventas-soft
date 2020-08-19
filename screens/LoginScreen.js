@@ -33,20 +33,20 @@ dispatch(loginAction(user,pass));
                 <Input
                     placeholder='Ingrese su usuario'
                     onChangeText={(user)=>setUser(user)}
+                    inputStyle={{'color': '#555'}}
                     leftIcon={
                         <Icon
                             name='user'
                             size={24}
-                            color='black'
+                            color='#777'
                         />
                     }
                 />
                
-               <Text>{JSON.stringify(user)}</Text>
+               
                 <Input
                     placeholder='Ingrese su contraseña'
-                    inputStyle={{'color': 'red'}}
-                    containerStyle={{color:'#000'}}
+                    inputStyle={{'color': '#555'}}
                     onChangeText={pass=>setPass(pass)}
                     
                     
@@ -54,7 +54,7 @@ dispatch(loginAction(user,pass));
                         <Icon 
                             name='unlock-alt'
                             size={24}
-                            color='black'
+                            color='#777'
                         />
                     }
                 />
