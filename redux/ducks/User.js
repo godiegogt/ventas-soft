@@ -3,7 +3,7 @@ import axios from 'axios'
 //Initial data
 const dataInicial = {
     loading: false,
-    activo: false,
+    activo: true,
     user_id:1,
     user_error:''
 }

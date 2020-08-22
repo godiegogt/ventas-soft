@@ -1,7 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View, ScrollView, Picker,TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
 import axios from 'axios'
+
+import { Picker } from '@react-native-community/picker'
 
 //Import elements
 import RadioButton,{RadioButtonCustomers}  from '../components/elements/RadioButton'

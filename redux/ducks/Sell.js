@@ -58,7 +58,7 @@ export const createSellAction=  (sell)=> async (dispatch)=>{
     .then(res => {
         console.log("Axios");
       //console.log(res);
-      console.log(res.data);
+     // console.log(res.data);
 
       dispatch({
         type: SUCCESS_SELL,
@@ -75,8 +75,8 @@ export const createSellAction=  (sell)=> async (dispatch)=>{
 }
 
 export const addProductAction = (product,amount) => (dispatch) => {
-    console.log("product");
-    console.log(product);
+   // console.log("product");
+   // console.log(product);
 
     dispatch({
         type: ADD_PRODUCTS,
@@ -90,8 +90,8 @@ export const addProductAction = (product,amount) => (dispatch) => {
 }
 
 export const deleteProductAction = (item) => (dispatch) => {
-    console.log('uuid');
-console.log(item.uuid);
+    //console.log('uuid');
+//console.log(item.uuid);
     dispatch({
         type: DELETE_PRODUCTS,
         payload: item.uuid

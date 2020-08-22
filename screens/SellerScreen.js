@@ -4,13 +4,16 @@ import { StyleSheet, Text, View,ScrollView, TouchableOpacity,FlatList } from 're
 import { SearchBar,Input,Button } from 'react-native-elements'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { materialTheme } from "../constants/";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, connect } from 'react-redux'
 
 import {getAllProductsAction} from '../redux/ducks/Products'
 import {getAllCustomersAction} from '../redux/ducks/Customer'
 
 import {addProductAction} from '../redux/ducks/Sell'
 import {deleteProductAction} from '../redux/ducks/Sell'
+
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 
@@ -24,13 +27,9 @@ const Product=({item})=>{
   
 
     const addProduct=async ()=>{
-       console.log('product');
-       console.log(item);
-       console.log('amount');
-       console.log(amount);
+
        dispatch(addProductAction(item,amount));
-       console.log('------Store products-------------');
-        console.log(productsdetaildata);
+  
 
     }
     
@@ -105,11 +104,10 @@ const DetailSell=({item})=>{
     const dispatch=useDispatch();
 
     const deleteProduct=()=>{
-        console.log('product');
-        console.log(item);
+       
 
         dispatch(deleteProductAction(item));
-        console.log('------Store products-------------');
+        
       
     }
 
@@ -149,8 +147,8 @@ const DetailSell=({item})=>{
 
 }
 
-const SellerScreen = ({ navigation }) => {
-    const [search,setSearch]=React.useState();
+const SellerScreen = ({ navigation ,products1}) => {
+    const [search,setSearch]=React.useState('');
     
     const productsdata = useSelector(state => state.products.allProducts);
     let productsdetaildata = useSelector(state => state.sell);
@@ -169,12 +167,31 @@ const SellerScreen = ({ navigation }) => {
         // console.log("-------------------------------------------------------")
         // console.log(productsdetaildata.products);
         calcTotal();
+        AsyncStorage.getAllKeys((err, keys) => {
+            AsyncStorage.multiGet(keys, (error, stores) => {
+              stores.map((result, i, store) => {
+                console.log('log async: ',{ [store[i][0]]: store[i][1] });
+                return true;
+              });
+            });
+          });
+
+          console.log("Productos:");
+          console.log(products1);
       
     }, []);
 
     React.useEffect(() => {
        
         calcTotal();
+        AsyncStorage.getAllKeys((err, keys) => {
+            AsyncStorage.multiGet(keys, (error, stores) => {
+              stores.map((result, i, store) => {
+                console.log('log async: ',{ [store[i][0]]: store[i][1] });
+                return true;
+              });
+            });
+          });
       
     }, [productsdetaildata.products]);
 
@@ -182,7 +199,7 @@ const SellerScreen = ({ navigation }) => {
         const unsubscribe = navigation.addListener('focus', () => {
            //productsdetaildata = useSelector(state => state.sell);
           // Do something
-          setSearch([]);
+          setSearch('');
         });
         
     
@@ -190,8 +207,7 @@ const SellerScreen = ({ navigation }) => {
       }, [navigation]);
 
     const calcTotal=()=>{
-        console.log("Store:")
-        console.log(productsdetaildata.products);
+      
         let temp=0;
         productsdetaildata.products.map((item)=>{
             temp=temp+item.price_out*item.amount;
@@ -241,7 +257,7 @@ const SellerScreen = ({ navigation }) => {
             <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>Detalle de venta:</Text>
 
             <FlatList
-                data={productsdetaildata.products}
+                data={products1}
                 renderItem={({item}) => <DetailSell item={item} />}
                 keyExtractor={(item) => item.uuid}
 
@@ -269,6 +285,7 @@ const SellerScreen = ({ navigation }) => {
         </ScrollView>
     )
 }
+
 
 export default SellerScreen
 

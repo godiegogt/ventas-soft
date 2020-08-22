@@ -1,0 +1,83 @@
+[33mcommit 1bc0cc55faadb825e62e263ca7395a71816cc94d[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Wed Aug 19 00:03:34 2020 -0600
+
+    Se mejoró el flujo de venta
+
+[33mcommit 00620fb240d042a209f30ca9d924d32ca47bc2d4[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 18 23:09:02 2020 -0600
+
+    Crear ventas
+
+[33mcommit 019e6efc973d703628fc296c612807eeb1d880cd[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 18 04:38:01 2020 -0600
+
+    Se trabajo en el total de la facturazión y en la forma que se imprimen los clientes al momento de filtrar
+
+[33mcommit 4331727004ac14797d713440be74f22a6e487003[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 18 03:55:05 2020 -0600
+
+    Se trabajó en agregar clientes
+
+[33mcommit 56ee9cb066509ce404ae0f4c7e2c3af2dea7c307[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 18 02:01:58 2020 -0600
+
+    Se trabajó en proceso de compra
+
+[33mcommit 7d54244fd3a9f3efefdeaf35d58862c0f374eda9[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 18 02:01:15 2020 -0600
+
+    Se agregó Redux
+
+[33mcommit de28df043452518370927cd6d4dca4004c474ebc[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Fri Aug 14 08:49:59 2020 -0600
+
+    Se terminó una primer versión de Checkin
+
+[33mcommit 05f2570e1b10169ecfdf251cbdc12cf20ef0f5bc[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Wed Aug 12 11:59:19 2020 -0600
+
+    Se terminó una primera versión de la interfáz de sell
+
+[33mcommit 181634ae51a1e212e8737a26472961d9a414c548[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Wed Aug 12 09:51:11 2020 -0600
+
+    Se agregaron cards a seller
+
+[33mcommit f8cebd5f944ee1d49cde187b07487197aa0c1cc0[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 11 20:58:56 2020 -0600
+
+    Se empezó a trabajar en el modulo Seller
+
+[33mcommit aad208e3172996bdea7046e05ad2e871e55cb5e0[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 11 19:17:12 2020 -0600
+
+    Se trabajó en interfáz del login
+
+[33mcommit c4dd5adb86e040f771e31d6f6b5290b632c6dcc7[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 11 19:16:34 2020 -0600
+
+    Se agregaron iconos al graddle
+
+[33mcommit 86644f078ead8d3d5547ce2c3763319f0c050503[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 11 14:15:29 2020 -0600
+
+    Se inicializó el flujo de la navegación
+
+[33mcommit becda6d39e663a024a164bbe9d2504006cc39d43[m
+Author: Diego Argueta <dargueta1879@gmail.com>
+Date:   Tue Aug 11 11:30:55 2020 -0600
+
+    Inicialización del repositorio

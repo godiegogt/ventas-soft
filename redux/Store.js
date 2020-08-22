@@ -7,6 +7,12 @@ import productsReducer from './ducks/Products'
 import sellReducer from './ducks/Sell'
 import customerReducer from './ducks/Customer'
 
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+
+import AsyncStorage from '@react-native-community/async-storage';
+import { products } from '../constants'
+
 
 const rootReducer=combineReducers({
   
@@ -16,10 +22,20 @@ const rootReducer=combineReducers({
     customer:customerReducer
 })
 
+const persistConfig = {
+    key: 'root',
+    
+    storage,
+    whitelist:['user','sell','customer','products']
+  }
+
+  const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default function generateStore() {
-    const store = createStore( rootReducer, composeEnhancers( applyMiddleware(thunk) ) )
-   // leerUsuarioActivoAccion()(store.dispatch)
-    return store
-}
+
+export default () => {
+    let store = createStore(persistedReducer,composeEnhancers( applyMiddleware(thunk)));
+    let persistor = persistStore(store)
+    return { store, persistor }
+  }

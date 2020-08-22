@@ -10,8 +10,8 @@ const UPDATE_CUSTOMERS = 'UPDATE_CUSTOMERS'
 const ADD_CUSTOMER = 'ADD_CUSTOMERS'
 
 export default function customersReducer(state = dataInicial, action) {
-console.log("It send customer");
-console.log(action.payload)
+//console.log("It send customer");
+//console.log(action.payload)
 
     switch (action.type) {
         case LOADING:
@@ -41,8 +41,8 @@ export const getAllCustomersAction = () => async (dispatch, getState) => {
     })
     try {
         const res = await axios.get('http://elangel.tendigt.com/?action=customers')
-        console.log("Clientes");
-        console.log(res.data);
+        // console.log("Clientes");
+        // console.log(res.data);
         dispatch({
             type: UPDATE_CUSTOMERS,
             payload: res.data
@@ -56,8 +56,8 @@ export const getAllCustomersAction = () => async (dispatch, getState) => {
 export const addCustomerAction = (customer) => async (dispatch, getState) => {
     const cus={ "name": "Di Argueta", "lastname": "Medina", "email": "", "image": null, "password": "", "created_at": "2020-06-28 23:12:05", "credit_limit": "0", "id": "10", "no": "c\/f", "company": null, "address1": "Ciudad", "address2": null, "phone1": " ", "phone2": null, "email1": " ", "email2": null, "is_active_access": "0", "has_credit": "0", "kind": "1" }
 
-    console.log("New customer:");
-    console.log(customer);
+    // console.log("New customer:");
+    // console.log(customer);
     customer.isNew=true;
     customer.id=guidGenerator();
     

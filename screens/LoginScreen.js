@@ -13,7 +13,7 @@ const LoginScreen = ({ navigation }) => {
 const [user,setUser]=React.useState();
 const [pass,setPass]=React.useState();
 const dispatch=useDispatch();
-const isLogin = useSelector(state => state.user.usererror)
+const isLogin = useSelector(state => state.user.activo)
 
 const login=()=>{
 console.log(pass);
@@ -21,7 +21,10 @@ console.log(user);
 //loginAction(user,pass);
 dispatch(loginAction(user,pass));
 
+
 }
+
+
 
     return (
         <View style={styles.container}>
@@ -73,6 +76,8 @@ dispatch(loginAction(user,pass));
         </View>
     )
 }
+
+
 
 export default LoginScreen
 
