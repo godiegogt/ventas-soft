@@ -4,7 +4,7 @@ export default {
       primary: '#015F94',
       LABEL: '#FE2472',
       INFO: '#00BCD4',
-      ERROR: '#F44336',
+      error: '#F44336',
       success: '#2B8000',
       WARNING: '#FF9800',
       MUTED: '#979797',

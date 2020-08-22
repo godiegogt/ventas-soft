@@ -4,7 +4,7 @@ import axios from 'axios'
 const dataInicial = {
     loading: false,
     activo: false,
-    user_id:1,
+    user_id:'',
     user_error:''
 }
 
@@ -27,7 +27,7 @@ export default function userReducer(state = dataInicial, action) {
         case USER_EXITO:
             return { ...state, loading: false, activo: true }
         case CERRAR_SESION:
-            return { ...dataInicial}
+            return { ...state, loading: false, activo: false }
         default:
             return state
     }
@@ -37,7 +37,7 @@ export default function userReducer(state = dataInicial, action) {
 
 
 
-export const cerrarSesionAccion = () => (dispatch) => {
+export const closeSessionAction = () => (dispatch) => {
 
     dispatch({
         type: CERRAR_SESION
