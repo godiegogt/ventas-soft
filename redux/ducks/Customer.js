@@ -28,7 +28,7 @@ export default function customersReducer(state = dataInicial, action) {
                 allCustomers: [...state.allCustomers,action.payload]
             }
         default:
-            return { ...state }
+            return state
     }
 
 }

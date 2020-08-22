@@ -18,7 +18,7 @@ export default function productsReducer(state = dataInicial, action) {
         case UPDATE_PRODUCTS:
             return { ...state,allProducts:action.payload }
         default:
-            return { ...state }
+            return state
     }
 
 }
