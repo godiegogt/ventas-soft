@@ -47,7 +47,7 @@ export default function sellReducer(state = dataInicial, action) {
         }
 
         default:
-            return { ...state }
+            return state
     }
 
 }

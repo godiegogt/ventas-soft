@@ -257,7 +257,7 @@ const SellerScreen = ({ navigation ,products1}) => {
             <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>Detalle de venta:</Text>
 
             <FlatList
-                data={products1}
+                data={productsdetaildata.products}
                 renderItem={({item}) => <DetailSell item={item} />}
                 keyExtractor={(item) => item.uuid}
 

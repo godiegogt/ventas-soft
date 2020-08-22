@@ -3,7 +3,7 @@ import axios from 'axios'
 //Initial data
 const dataInicial = {
     loading: false,
-    activo: true,
+    activo: false,
     user_id:1,
     user_error:''
 }
@@ -29,7 +29,7 @@ export default function userReducer(state = dataInicial, action) {
         case CERRAR_SESION:
             return { ...dataInicial}
         default:
-            return { ...state }
+            return state
     }
 
 }
