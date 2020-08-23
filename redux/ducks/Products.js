@@ -1,7 +1,7 @@
 import axios from 'axios'
 //Initial data
 const dataInicial = {
-    loading: false,
+    loading: 'false',
     allProducts:{
 
     }
@@ -14,9 +14,9 @@ export default function productsReducer(state = dataInicial, action) {
 
     switch (action.type) {
         case LOADING:
-            return { ...state, loading: true }
+            return { ...state, loading: 'true' }
         case UPDATE_PRODUCTS:
-            return { ...state,allProducts:action.payload }
+            return { ...state,allProducts:action.payload,loading:'false' }
         default:
             return state
     }
@@ -25,9 +25,9 @@ export default function productsReducer(state = dataInicial, action) {
 
 export const getAllProductsAction=()=> async (dispatch, getState)=>{
 
-    dispatch({
-        type: LOADING
-    })
+    // dispatch({
+    //     type: LOADING
+    // })
     try {
         const res = await axios.get('http://elangel.tendigt.com/?action=products')
         //console.log("Productos");

@@ -6,7 +6,7 @@ export default {
       INFO: '#00BCD4',
       error: '#F44336',
       success: '#2B8000',
-      WARNING: '#FF9800',
+      warning: '#FF9800',
       MUTED: '#979797',
       INPUT: '#DCDCDC',
       ACTIVE: '#9C26B0',

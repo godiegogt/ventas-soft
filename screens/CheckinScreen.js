@@ -18,25 +18,6 @@ import { useDispatch, useSelector } from 'react-redux'
     import { addCustomerAction } from "../redux/ducks/Customer";
     import {createSellAction,clearProductsAction} from "../redux/ducks/Sell";
 
-const PROP = [
-	{
-		key: 'samsung',
-		text: 'Samsung',
-	},
-	{
-		key: 'apple',
-		text: 'Apple',
-	},
-	{
-		key: 'motorola',
-		text: 'Motorola',
-	},
-	{
-		key: 'lenovo',
-		text: 'Lenovo',
-  },
-];
-
 const CheckinScreen = ({navigation}) => {
    
     const [paymentstate, setpaymentstate] = React.useState(1);
@@ -59,7 +40,7 @@ const CheckinScreen = ({navigation}) => {
     const [address, setAddress] = React.useState('4');
     const [phone, setPhone] = React.useState('5');
     const [search,setSearch]=React.useState();
-    let [searchdata,setSearchdata]=React.useState();
+    let [searchdata,setSearchdata]=React.useState([]);
     let [total,setTotal]=React.useState();
 
     //Initilization of dispatch from redux
@@ -74,7 +55,13 @@ const CheckinScreen = ({navigation}) => {
 
      React.useEffect(()=>{
 
+        console.log("CLientes:");
+        console.log(customers);
+
         calcTotal();
+
+        console.log("Search data:");
+        console.log(searchdata);
 
 
 
@@ -122,6 +109,9 @@ const CheckinScreen = ({navigation}) => {
 
             })
         );
+
+        console.log("Search data:");
+        console.log(searchdata);
 
     }
 
@@ -222,7 +212,7 @@ const CheckinScreen = ({navigation}) => {
                     title="Agregar cliente"
                 />
 
-                {searchdata?<RadioButtonCustomers 
+                {(typeof searchdata != "undefined" && searchdata != null && searchdata.length != null && searchdata.length > 0)?<RadioButtonCustomers 
                 customers={searchdata} 
                 valueSelected={changeCustomer}
                 selected={customerSelected}
@@ -303,7 +293,7 @@ const CheckinScreen = ({navigation}) => {
 
             </ScrollView>
 
-            <Alert modalAlert={modalAlert} changeModalAlert={changeModalAlert} />
+            <Alert modalState={modalAlert} alarmType='alert' modalAction={changeModalAlert} description="Debe completar todos los datos." buttonTitle="Entendido" />
 
             <Modal isVisible={modalVisible}>
                 <View style={{ flex: 1, backgroundColor: '#fff', padding: 20, maxHeight: 500,borderRadius: 20 }}>
@@ -373,27 +363,8 @@ const CheckinScreen = ({navigation}) => {
 
             </Modal>
 
-            <Modal isVisible={isSuccess}>
-                <View style={{ flex: 1, backgroundColor: '#fff', padding: 20, maxHeight: 200, borderRadius: 20,justifyContent:'center',alignItems:'center' }}>
-                    <Icon
-                        name="check-circle"
-                        size={60}
-                        color={materialTheme.colors.success}
-                        marginBottom={40}
-                    />
+            <Alert modalState={isSuccess} modalAction={completeProcess} description='¡Se ha creado con éxito la venta!' buttonTitle='Entendido' alarmType='alert'/>
 
-                    <Text style={{ fontSize: 16, color: '#555', fontWeight: 'bold' }}>¡Se ha creado con éxito la venta!</Text>
-
-                    <Button
-                        onPress={() => { completeProcess() }}
-                        buttonStyle={{ borderRadius: 10 }}
-                        title="Ok"
-                        containerStyle={{width:'80%'}}
-                    />
-
-                </View>
-
-            </Modal>
 
         </View>
     )

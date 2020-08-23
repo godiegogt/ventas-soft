@@ -20,7 +20,7 @@ export default function customersReducer(state = dataInicial, action) {
 
             return {
                 ...state,
-                allCustomers: [...action.payload]
+                allCustomers: action.payload
             }
         case ADD_CUSTOMER:
             return {
@@ -41,8 +41,8 @@ export const getAllCustomersAction = () => async (dispatch, getState) => {
     })
     try {
         const res = await axios.get('http://elangel.tendigt.com/?action=customers')
-        // console.log("Clientes");
-        // console.log(res.data);
+        console.log("Clientes");
+        console.log(res.data);
         dispatch({
             type: UPDATE_CUSTOMERS,
             payload: res.data

@@ -70,14 +70,6 @@ React.useEffect(() => {
   console.log("Esta activo");
   console.log(isLogin);
   console.log(user);
-  AsyncStorage.getAllKeys((err, keys) => {
-    AsyncStorage.multiGet(keys, (error, stores) => {
-      stores.map((result, i, store) => {
-        console.log('log async: ',{ [store[i][0]]: store[i][1] });
-        return true;
-      });
-    });
-  });
   }, [])
 
 

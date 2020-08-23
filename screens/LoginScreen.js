@@ -3,25 +3,38 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useDispatch, useSelector } from 'react-redux'
 
-import {loginAction} from '../redux/ducks/User'
+//Redux Actions
+import {loginAction,clearErrosAction} from '../redux/ducks/User'
 
 
 import { Input, Button } from 'react-native-elements';
 
+//Elements
+import Alert from "../components/elements/Alert";
+
 const LoginScreen = ({ navigation }) => {
 
-const [user,setUser]=React.useState();
+const [username,setUserName]=React.useState();
 const [pass,setPass]=React.useState();
 const dispatch=useDispatch();
-const isLogin = useSelector(state => state.user.activo)
+const user = useSelector(state => state.user);
+
+const [alertInfo,setAlertIndo]=React.useState();
 
 const login=()=>{
 console.log(pass);
-console.log(user);
+console.log(username);
 //loginAction(user,pass);
-dispatch(loginAction(user,pass));
 
 
+    dispatch(loginAction(username,pass));
+
+
+}
+
+const clearErrors=()=>{
+    console.log(user);
+    dispatch(clearErrosAction());
 }
 
 
@@ -35,7 +48,7 @@ dispatch(loginAction(user,pass));
             <View style={styles.formLogin}>
                 <Input
                     placeholder='Ingrese su usuario'
-                    onChangeText={(user)=>setUser(user)}
+                    onChangeText={(username)=>setUserName(username)}
                     inputStyle={{'color': '#555'}}
                     leftIcon={
                         <Icon
@@ -45,7 +58,6 @@ dispatch(loginAction(user,pass));
                         />
                     }
                 />
-               
                
                 <Input
                     placeholder='Ingrese su contraseña'
@@ -71,6 +83,10 @@ dispatch(loginAction(user,pass));
                     onPress={()=>login()}
                 />
             </View>
+
+            <Alert modalState={!user.user_error==''?true:false} modalAction={clearErrors} alarmType='alert' description={user.user_error} buttonTitle='Entendido' />
+
+
 
 
         </View>
