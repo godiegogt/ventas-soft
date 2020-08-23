@@ -58,7 +58,6 @@ console.log("Despachamos limpieza");
 
 export const loginAction = (user, pass) => async (dispatch) => {
 
- try {
     console.log("user")
     console.log(user)
 
@@ -84,7 +83,7 @@ export const loginAction = (user, pass) => async (dispatch) => {
     let data = {};
     //Realizamos conexión
     console.log("Intento de conexion")
-    await axios.post(`http://elangel.tendigt.com/api/auth.php`, { "username": user, "password": pass })
+    await axios.post(`http://elangel.tendigt.com/api/auth.php`, { "username": user, "password": pass },{timeout:2000})
         .then(res => {
             console.log("Axios");
             //console.log(res);
@@ -95,7 +94,7 @@ export const loginAction = (user, pass) => async (dispatch) => {
 
         })
         .catch((err)=>{
-            console.log("Catchamos un error")
+            console.log("Catchamos");
         });
 
         console.log("Verificamos que jodidos tiene data");
@@ -122,11 +121,6 @@ export const loginAction = (user, pass) => async (dispatch) => {
             return;
 
         }
-
-       
-
-
-        //Ha ocurrido algún error
    
         console.log("Fase final")
         dispatch({
@@ -134,9 +128,6 @@ export const loginAction = (user, pass) => async (dispatch) => {
             payload: 'No se ha podido conectar con el servidor.'
         });
 
- } catch (error) {
-     console.log("Catchamos el ultimo error")
- }
     
 
 }
