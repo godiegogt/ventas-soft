@@ -111,13 +111,9 @@ const SellerScreen = ({ navigation ,products1}) => {
             {!(typeof searchdata != "undefined" && searchdata != null && searchdata.length != null && searchdata.length > 0)
             ?
             <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>No hay resultados de búsqueda.</Text>
-            :
-            <FlatList
-            data={searchdata}
-            renderItem={({ item }) => <Product item={item}/> }
-            keyExtractor={(item) => item.id}
-            />
-
+            :searchdata.map((item)=>{
+              return  <Product item={item}/>
+            })
             }
 
             {!(typeof productsdetaildata.products != "undefined" && productsdetaildata.products != null && productsdetaildata.products != null && productsdetaildata.products.length > 0)
@@ -125,12 +121,11 @@ const SellerScreen = ({ navigation ,products1}) => {
             <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>No tiene productos seleccionados.</Text>
             :
             <><Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>Detalle de venta:</Text>
-            <FlatList
-                data={productsdetaildata.products}
-                renderItem={({item}) => <DetailSell item={item} />}
-                keyExtractor={(item) => item.uuid}
-
-            /></>
+            {
+                productsdetaildata.products.map((item,key)=>{
+                  return  <DetailSell key={key} item={item} />
+                })
+            }</>
             }
 
             <Text style={{alignSelf:'flex-end',color:materialTheme.colors.primary,fontSize:20,fontWeight:'bold'}}>
