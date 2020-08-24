@@ -6,14 +6,12 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { materialTheme } from "../constants/";
 import { useDispatch, useSelector, connect } from 'react-redux'
 
+
+//Actions
 import {getAllProductsAction} from '../redux/ducks/Products'
 import {getAllCustomersAction} from '../redux/ducks/Customer'
+ import {syncAllSellsAction} from '../redux/ducks/Sell'
 
-import {addProductAction} from '../redux/ducks/Sell'
-import {deleteProductAction} from '../redux/ducks/Sell'
-
-
-import AsyncStorage from '@react-native-community/async-storage';
 
 //Elements
 import Product from '../components/elements/Product'
@@ -24,6 +22,7 @@ const SellerScreen = ({ navigation ,products1}) => {
     const [search,setSearch]=React.useState('');
     
     const productsdata = useSelector(state => state.products);
+    const sellstate = useSelector(state => state.sell);
     let productsdetaildata = useSelector(state => state.sell);
     const dispatch=useDispatch();
     let [searchdata,setSearchdata]=React.useState([]);
@@ -35,36 +34,21 @@ const SellerScreen = ({ navigation ,products1}) => {
     React.useEffect(() => {
         dispatch(getAllProductsAction());
         dispatch(getAllCustomersAction());
-
-        // console.log("Mi Estore Store:")
-        // console.log("-------------------------------------------------------")
-        // console.log(productsdetaildata.products);
+        dispatch(syncAllSellsAction());
         calcTotal();
-        // AsyncStorage.getAllKeys((err, keys) => {
-        //     AsyncStorage.multiGet(keys, (error, stores) => {
-        //       stores.map((result, i, store) => {
-        //         console.log('log async: ',{ [store[i][0]]: store[i][1] });
-        //         return true;
-        //       });
-        //     });
-        //   });
 
-        console.log('Estado de carga:')
-        console.log(productsdetaildata.loading);
+
       
     }, []);
 
     React.useEffect(() => {
+       console.log("Sells:");
+       console.log(sellstate.sells);
+    }, [sellstate])
+
+    React.useEffect(() => {
        
         calcTotal();
-        // AsyncStorage.getAllKeys((err, keys) => {
-        //     AsyncStorage.multiGet(keys, (error, stores) => {
-        //       stores.map((result, i, store) => {
-        //         console.log('log async: ',{ [store[i][0]]: store[i][1] });
-        //         return true;
-        //       });
-        //     });
-        //   });
       
     }, [productsdetaildata.products]);
 
@@ -73,16 +57,13 @@ const SellerScreen = ({ navigation ,products1}) => {
            //productsdetaildata = useSelector(state => state.sell);
           // Do something
           setSearch('');
+          setSearchdata([]);
         });
         
     
         return unsubscribe;
       }, [navigation]);
 
-      React.useEffect(() => {
-          console.log('Estado de carga:')
-         console.log(productsdetaildata.loading);
-      }, [productsdetaildata])
 
     const calcTotal=()=>{
       

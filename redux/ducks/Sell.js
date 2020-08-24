@@ -3,7 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 //Initial data
 const dataInicial = {
     loading: false,
-    products: []
+    products: [],
+    sells: []
 }
 
 const LOADING = 'LOADING'
@@ -11,6 +12,9 @@ const ADD_PRODUCTS = 'ADD_PRODUCTS'
 const DELETE_PRODUCTS = 'DELETE_PRODUCTS'
 const SUCCESS_SELL = 'SUCCESS_SELL'
 const CLEAR_PRODUCTS = 'CLEAR_PRODUCTS'
+const ERROR_CREATE_SELL='ERROR_CREATE_SELL'
+
+const SUCCESS_SYNC_SELL='SUCCESS_SYNC_SELL'
 
 export default function sellReducer(state = dataInicial, action) {
 
@@ -26,7 +30,6 @@ export default function sellReducer(state = dataInicial, action) {
         }
         case DELETE_PRODUCTS: {
 
-            
 
             return {
                 ...state,
@@ -38,11 +41,25 @@ export default function sellReducer(state = dataInicial, action) {
                 ...state
             }
         }
+        case ERROR_CREATE_SELL: {
+            return {
+                ...state,
+                sells:[...state.sells,action.payload]
+            }
+        }
         case CLEAR_PRODUCTS: {
 
             return {
                 ...state,
                 products: []
+            }
+        }
+        case SUCCESS_SYNC_SELL: {
+
+
+            return {
+                ...state,
+                sells: state.sells.filter(item=>item.uuid !== action.payload)
             }
         }
 
@@ -52,20 +69,37 @@ export default function sellReducer(state = dataInicial, action) {
 
 }
 
-export const createSellAction=  (sell)=> async (dispatch)=>{
+export const createSellAction=  (sell)=> async (dispatch,state)=>{
+    sell.uuid=guidGenerator();
+    //Limpiamos los productos seleccionados
+    
+    // dispatch({
+    //type: CLEAR_PRODUCTS
+    console.log("Datos de venta:");
+    console.log(sell);
 
-    await axios.post(`http://elangel.tendigt.com/?action=sell`, sell)
+    await axios.post(`http://elangel.tendigt.com/?action=sell`, sell,{timeout:200})
     .then(res => {
         console.log("Axios");
       //console.log(res);
-     // console.log(res.data);
-
-      dispatch({
-        type: SUCCESS_SELL,
-        payload: res.data
-    })
+        console.log(res.data);
      
-      
+
+        dispatch({
+            type: SUCCESS_SELL
+        })
+
+
+
+    
+    }).catch(err=>{
+        console.log("Cachamos la venta fallida:")
+
+        dispatch({
+            type: ERROR_CREATE_SELL,
+            payload:sell
+        })
+
     })
 
    
@@ -106,6 +140,43 @@ export const clearProductsAction = () => (dispatch) => {
     })
 
 }
+//Esta accion sincroniza todas las ventas almacenadas que no se hayan sincronizado
+export const syncAllSellsAction= ()=>  (dispatch,getState)=>{
+
+    const sells=getState().sell.sells;
+    console.log("Obtenemos las ventas sin sincronizar:");
+    //console.log(getState().sell.sells);
+    //Recoremos venta por venta para sincronizar.
+    sells.map( async (sell,item)=>{
+        console.log("Numero de venta:"+item);
+        console.log(sell);
+
+        //Es la misma acción que crea acciones con la diferencia que elimina las ventas del store que ya se hayan sincronizado
+        await axios.post(`http://elangel.tendigt.com/?action=sell`, sell,{timeout:200})
+        .then(res => {
+            console.log("Suncronizamos venta: "+sell.uuid);
+            dispatch({
+                type: SUCCESS_SYNC_SELL,
+                dispatch:sell.uuid
+            })
+
+        }).catch(err=>{
+            console.log("Cachamos la venta fallida:");
+            return; 
+        });
+
+
+
+    });
+
+
+
+
+    return;
+
+}
+
+
 
 
 function guidGenerator() {

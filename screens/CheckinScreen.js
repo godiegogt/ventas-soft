@@ -116,6 +116,8 @@ const CheckinScreen = ({navigation}) => {
     }
 
       const changeCustomer=(customer)=>{
+          console.log("Custome");
+          console.log(customer);
 
         setCustomerSelected(customer)
           
@@ -134,7 +136,7 @@ const CheckinScreen = ({navigation}) => {
         if(invoiceNo!=='' && paymentstate!=='' && deliverystate!=='' && paymentype!=='' && customerSelected!=={} && products!=[]){
 
 
-          const sell={
+          let sell={
             customerSelected,
             products,
             user,
@@ -152,9 +154,12 @@ const CheckinScreen = ({navigation}) => {
             
           }
 
-         // dispatch(createSellAction(sell));
+          console.log("Venta:");
+          console.log(sell);
+
+         dispatch(createSellAction(sell));
           //Liampiamos el carro ce compra
-          dispatch(clearProductsAction());
+        //   dispatch(clearProductsAction());
           setIsSuccess(true);
           console.log("Productos:");
           console.log(products);
@@ -224,6 +229,7 @@ const CheckinScreen = ({navigation}) => {
                     placeholder='Número de fáctura'
                     inputStyle={{ color: '#777', fontSize: 16 }}
                     onChangeText={(invoiceNo)=>{setInvoiceNo(invoiceNo)}}
+                    
                 />
 
                 <Picker
@@ -363,7 +369,7 @@ const CheckinScreen = ({navigation}) => {
 
             </Modal>
 
-            <Alert modalState={isSuccess} modalAction={completeProcess} description='¡Se ha creado con éxito la venta!' buttonTitle='Entendido' alarmType='alert'/>
+            <Alert modalState={isSuccess} modalAction={completeProcess} description='¡Se ha creado con éxito la venta!' buttonTitle='Entendido' alarmType='success'/>
 
 
         </View>
