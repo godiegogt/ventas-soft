@@ -19,6 +19,8 @@ export const RadioButtonCustomers = ({ customers, valueSelected,selected}) => {
 			{customers.map(res => {
 				return (
 					<TouchableOpacity
+
+						key={res.id}
 						onPress={() => {
 							valueSelected(res);
 							setvalue(res.id)
