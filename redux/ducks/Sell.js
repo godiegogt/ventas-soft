@@ -80,17 +80,14 @@ export const createSellAction=  (sell)=> async (dispatch,state)=>{
 
     await axios.post(`http://elangel.tendigt.com/?action=sell`, sell,{timeout:200})
     .then(res => {
-        console.log("Axios");
+        //console.log("Axios");
       //console.log(res);
-        console.log(res.data);
+        //console.log(res.data);
      
 
         dispatch({
             type: SUCCESS_SELL
         })
-
-
-
     
     }).catch(err=>{
         console.log("Cachamos la venta fallida:")
@@ -149,7 +146,7 @@ export const syncAllSellsAction= ()=>  (dispatch,getState)=>{
     //Recoremos venta por venta para sincronizar.
     sells.map( async (sell,item)=>{
         console.log("Numero de venta:"+item);
-        console.log(sell);
+        //console.log(sell);
 
         //Es la misma acción que crea acciones con la diferencia que elimina las ventas del store que ya se hayan sincronizado
         await axios.post(`http://elangel.tendigt.com/?action=sell`, sell,{timeout:200})
@@ -157,7 +154,7 @@ export const syncAllSellsAction= ()=>  (dispatch,getState)=>{
             console.log("Suncronizamos venta: "+sell.uuid);
             dispatch({
                 type: SUCCESS_SYNC_SELL,
-                dispatch:sell.uuid
+                payload:sell.uuid
             })
 
         }).catch(err=>{
