@@ -8,10 +8,10 @@ import sellReducer from './ducks/Sell'
 import customerReducer from './ducks/Customer'
 
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { products } from '../constants'
+
 
 
 const rootReducer=combineReducers({
