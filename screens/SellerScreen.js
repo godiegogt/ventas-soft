@@ -1,161 +1,31 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View,ScrollView, TouchableOpacity,FlatList } from 'react-native'
+import { StyleSheet, Text, View,ScrollView, TouchableOpacity,FlatList,ActivityIndicator } from 'react-native'
 
 import { SearchBar,Input,Button } from 'react-native-elements'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { materialTheme } from "../constants/";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, connect } from 'react-redux'
 
+
+//Actions
 import {getAllProductsAction} from '../redux/ducks/Products'
 import {getAllCustomersAction} from '../redux/ducks/Customer'
-
-import {addProductAction} from '../redux/ducks/Sell'
-import {deleteProductAction} from '../redux/ducks/Sell'
+ import {syncAllSellsAction} from '../redux/ducks/Sell'
 
 
+//Elements
+import Product from '../components/elements/Product'
+import DetailSell from '../components/elements/DetailSell'
 
-const Product=({item})=>{
-    const [amount,setAmount]=useState(0);
-    const dispatch=useDispatch();
-    let productsdetaildata = [];
 
- 
-        productsdetaildata=useSelector(state => state.sell.products);
-  
-
-    const addProduct=async ()=>{
-       console.log('product');
-       console.log(item);
-       console.log('amount');
-       console.log(amount);
-       dispatch(addProductAction(item,amount));
-       console.log('------Store products-------------');
-        console.log(productsdetaildata);
-
-    }
+const SellerScreen = ({ navigation ,products1}) => {
+    const [search,setSearch]=React.useState('');
     
-    return(
-        <View style={styles.card}>
-        <View style={styles.cardList}>
-            <View style={styles.cardListItem}>
-                <Text style={styles.cardListText}>
-                    Código: {item.id}
-                </Text>
-            </View>
-            <View style={styles.cardListItem}>
-                <Text style={styles.cardListText}>
-                    Nombre: {item.name}
-                </Text>
-            </View>
-            <View style={styles.cardListItem}>
-                <Text style={styles.cardListText}>
-                    Unidad: {item.unit}
-                </Text>
-            </View>
-            <View style={styles.cardListItem}>
-                <Text style={styles.cardListText}>
-                    Precio unitario: Q {item.price_out}
-                </Text>
-            </View>
-            <View style={styles.cardListItem}>
-                <Text style={styles.cardListText}>
-                    En inventario: {item.inventary_min}
-                </Text>
-            </View>
-        </View>
-      
-
-        <View style={styles.cardButtons}>
-            <View style={{flex:1}}>
-            <Input
-                containerStyle={{margin:0}}
-                placeholder='Cantidad'
-                onChangeText={(amount)=>{setAmount(amount)}}
-            />
-            
-
-            </View>
-            <View style={{flex:1,height:40}}>
-            <Button
-                containerStyle={{height:100}}
-                onPress={(item,amount)=>{addProduct()}}
-                icon={
-                    <Icon
-                        name="plus-circle"
-                        size={15}
-                        color="white"
-                        marginBottom={40}
-                    />
-                }
-                title="Agregar"
-            />
-
-            </View>
-
-
-
-        </View>
-            <Text  h4 style={{alignSelf:'flex-end'}}> Subtotal: Q {item.price_out*amount}</Text>
-    </View>
-    )
-}
-
-const DetailSell=({item})=>{
-
-    const dispatch=useDispatch();
-
-    const deleteProduct=()=>{
-        console.log('product');
-        console.log(item);
-
-        dispatch(deleteProductAction(item));
-        console.log('------Store products-------------');
-      
-    }
-
-    return(
-        <View style={{...styles.card,flexDirection:'row'}}>
-        <View style={{flex:5,marginLeft:20}}>
-
-            <Text style={{fontSize:20,fontWeight:'bold',color:materialTheme.colors.primary}}>
-                <Text>
-                {item.name}/ {item.unit}/{item.amount} Unidades
-                </Text>
-            </Text>
-            <Text style={{color:materialTheme.colors.primary}}>
-            Q {item.price_out*item.amount}
-            </Text>
-        </View>
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            <TouchableOpacity
-            onPress={()=>{deleteProduct()}}
-            >
-
-                
-
-            <Icon
-                        name="trash"
-                        size={30}
-                        color="#DD0000"
-                        marginBottom={40}
-                    />
-            </TouchableOpacity>
-
-        </View>
-
-
-    </View>
-    )
-
-}
-
-const SellerScreen = ({ navigation }) => {
-    const [search,setSearch]=React.useState();
-    
-    const productsdata = useSelector(state => state.products.allProducts);
+    const productsdata = useSelector(state => state.products);
+    const sellstate = useSelector(state => state.sell);
     let productsdetaildata = useSelector(state => state.sell);
     const dispatch=useDispatch();
-    let [searchdata,setSearchdata]=React.useState();
+    let [searchdata,setSearchdata]=React.useState([]);
     let [total,setTotal]=React.useState();
    
         
@@ -164,13 +34,17 @@ const SellerScreen = ({ navigation }) => {
     React.useEffect(() => {
         dispatch(getAllProductsAction());
         dispatch(getAllCustomersAction());
-
-        // console.log("Mi Estore Store:")
-        // console.log("-------------------------------------------------------")
-        // console.log(productsdetaildata.products);
+        dispatch(syncAllSellsAction());
         calcTotal();
+
+
       
     }, []);
+
+    React.useEffect(() => {
+       console.log("Sells:");
+       console.log(sellstate.sells);
+    }, [sellstate])
 
     React.useEffect(() => {
        
@@ -182,16 +56,17 @@ const SellerScreen = ({ navigation }) => {
         const unsubscribe = navigation.addListener('focus', () => {
            //productsdetaildata = useSelector(state => state.sell);
           // Do something
-          setSearch([]);
+          setSearch('');
+          setSearchdata([]);
         });
         
     
         return unsubscribe;
       }, [navigation]);
 
+
     const calcTotal=()=>{
-        console.log("Store:")
-        console.log(productsdetaildata.products);
+      
         let temp=0;
         productsdetaildata.products.map((item)=>{
             temp=temp+item.price_out*item.amount;
@@ -207,7 +82,7 @@ const SellerScreen = ({ navigation }) => {
             return
         }
         setSearchdata(
-            productsdata.filter(function (data) {
+            productsdata.allProducts.filter(function (data) {
                 return data.name.toLowerCase().includes(search.toLowerCase()) 
 
             })
@@ -217,7 +92,11 @@ const SellerScreen = ({ navigation }) => {
 
 
     return (
+
         <ScrollView style={styles.container}>
+            
+            {productsdata.loading=='false'
+            ?<View>
             <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' }}>Buscar productos por nombre o por código:</Text>
             <SearchBar
                 placeholder="Buscar productos..."
@@ -229,25 +108,25 @@ const SellerScreen = ({ navigation }) => {
 
                
             />
-            <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>Resultados de la búsqueda:</Text>
+            {!(typeof searchdata != "undefined" && searchdata != null && searchdata.length != null && searchdata.length > 0)
+            ?
+            <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>No hay resultados de búsqueda.</Text>
+            :searchdata.map((item)=>{
+              return  <Product item={item}/>
+            })
+            }
 
-            <FlatList
-                data={searchdata}
-                renderItem={({ item }) => <Product item={item}/> }
-                keyExtractor={(item) => item.id}
-                
-            />
-        
-            <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>Detalle de venta:</Text>
-
-            <FlatList
-                data={productsdetaildata.products}
-                renderItem={({item}) => <DetailSell item={item} />}
-                keyExtractor={(item) => item.uuid}
-
-            />
-
-
+            {!(typeof productsdetaildata.products != "undefined" && productsdetaildata.products != null && productsdetaildata.products != null && productsdetaildata.products.length > 0)
+            ?
+            <Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>No tiene productos seleccionados.</Text>
+            :
+            <><Text h4 style={{ alignSelf: 'flex-start', fontSize: 16, fontWeight: 'bold' ,color:'#777'}}>Detalle de venta:</Text>
+            {
+                productsdetaildata.products.map((item,key)=>{
+                  return  <DetailSell key={key} item={item} />
+                })
+            }</>
+            }
 
             <Text style={{alignSelf:'flex-end',color:materialTheme.colors.primary,fontSize:20,fontWeight:'bold'}}>
             
@@ -260,15 +139,17 @@ const SellerScreen = ({ navigation }) => {
                         buttonStyle={{backgroundColor:materialTheme.colors.success,borderRadius:5}}
                         onPress={()=>navigation.navigate('Checkin')}
                     />
-
-
-            
-
-            
+            </View>
+            :<View>
+                <ActivityIndicator size="large" color={materialTheme.colors.primary} />
+            </View>
+            }
+           
 
         </ScrollView>
     )
 }
+
 
 export default SellerScreen
 

@@ -25,6 +25,7 @@ import AppStack from "./navigation/Screens";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { useDispatch, useSelector} from 'react-redux'
 
@@ -37,13 +38,19 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import generateStore from './redux/Store'
+import { PersistGate } from 'redux-persist/integration/react';
+import configureStore from './redux/Store'
+const { store,persistor } =configureStore();
 
 const AppWrapper = () => {
-  const store = generateStore();
+  //const store = generateStore();
 
   return (
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <App /> 
+      </PersistGate>
+      
     </Provider>
   )
 }
@@ -55,12 +62,15 @@ const AppWrapper = () => {
 const App = () => {
 
 
-  const isLogin = useSelector(state => state.user.activo)
+  const isLogin = useSelector(state => state.user.activo);
+  const user = useSelector(state => state.user);
+
 
 React.useEffect(() => {
+  console.log("Esta activo");
   console.log(isLogin);
-}, [])
-
+  console.log(user);
+  }, [])
 
 
   return (
@@ -91,6 +101,7 @@ React.useEffect(() => {
   
   );
 };
+
 
 const styles = StyleSheet.create({
   scrollView: {

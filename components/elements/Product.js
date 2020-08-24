@@ -1,3 +1,22 @@
+import React, { useState } from 'react'
+import { StyleSheet, Text, View,ScrollView, TouchableOpacity,FlatList } from 'react-native'
+
+import { SearchBar,Input,Button } from 'react-native-elements'
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { materialTheme } from "../../constants/";
+import { useDispatch, useSelector, connect } from 'react-redux'
+
+import {getAllProductsAction} from '../../redux/ducks/Products'
+import {getAllCustomersAction} from '../../redux/ducks/Customer'
+
+import {addProductAction} from '../../redux/ducks/Sell'
+import {deleteProductAction} from '../../redux/ducks/Sell'
+
+
+import AsyncStorage from '@react-native-community/async-storage';
+
+
+
 const Product=({item})=>{
     const [amount,setAmount]=useState(0);
     const dispatch=useDispatch();
@@ -8,13 +27,9 @@ const Product=({item})=>{
   
 
     const addProduct=async ()=>{
-       console.log('product');
-       console.log(item);
-       console.log('amount');
-       console.log(amount);
+
        dispatch(addProductAction(item,amount));
-       console.log('------Store products-------------');
-        console.log(productsdetaildata);
+  
 
     }
     
@@ -38,7 +53,7 @@ const Product=({item})=>{
             </View>
             <View style={styles.cardListItem}>
                 <Text style={styles.cardListText}>
-                    Precio unitario: Q {item.price_in}
+                    Precio unitario: Q {item.price_out}
                 </Text>
             </View>
             <View style={styles.cardListItem}>
@@ -79,10 +94,12 @@ const Product=({item})=>{
 
 
         </View>
-            <Text  h4 style={{alignSelf:'flex-end'}}> Subtotal: Q {item.price_in*amount}</Text>
+            <Text  h4 style={{alignSelf:'flex-end'}}> Subtotal: Q {item.price_out*amount}</Text>
     </View>
     )
 }
+
+export default Product;
 
 
 const styles = StyleSheet.create({

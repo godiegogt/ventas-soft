@@ -1,7 +1,7 @@
 import axios from 'axios'
 //Initial data
 const dataInicial = {
-    loading: false,
+    loading: 'false',
     allProducts:{
 
     }
@@ -9,36 +9,45 @@ const dataInicial = {
 
 const LOADING='LOADING'
 const UPDATE_PRODUCTS = 'UPDATE_PRODUCTS'
+const ERROR_UPDATE_PRODUCTS = 'ERROR_UPDATE_PRODUCTS'
 
 export default function productsReducer(state = dataInicial, action) {
 
     switch (action.type) {
         case LOADING:
-            return { ...state, loading: true }
+            return { ...state, loading: 'true' }
         case UPDATE_PRODUCTS:
-            return { ...state,allProducts:action.payload }
+            return { ...state,allProducts:action.payload,loading:'false' }
         default:
-            return { ...state }
+            case ERROR_UPDATE_PRODUCTS:
+            return { ...state,loading:'false' }
+        d
+            return state
     }
 
 }
 
 export const getAllProductsAction=()=> async (dispatch, getState)=>{
 
-    dispatch({
-        type: LOADING
-    })
-    try {
-        const res = await axios.get('http://elangel.tendigt.com/?action=products')
-        //console.log("Productos");
-       // console.log(res);
+    // dispatch({
+    //     type: LOADING
+    // })
+
+    await axios.get('http://elangel.tendigt.com/?action=products',{timeout:200})
+    .then(res => {
         dispatch({
             type: UPDATE_PRODUCTS,
             payload: res.data
         })
-    } catch (error) {
-        console.log(error)
-    }
+    
+    }).catch(err=>{
+        console.log("Cachamos la productos fallida:")
+
+        dispatch({
+            type: ERROR_UPDATE_PRODUCTS
+        })
+
+    })
 
 }
 

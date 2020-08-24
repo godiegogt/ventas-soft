@@ -8,6 +8,7 @@ import CheckinScreen from '../screens/CheckinScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SelllsScreen from '../screens/SellsScreen';
 import SellsScreen from '../screens/SellsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 
 import { Images, materialTheme } from "../constants/";
@@ -70,6 +71,17 @@ function SellsStack(props) {
   );
 }
 
+function ProfileStack(props) {
+  return (
+      <Stack.Navigator mode="card" headerMode="screen">
+          <Stack.Screen
+              name="Profile"
+              component={ProfileScreen}
+          />
+      </Stack.Navigator>
+  );
+}
+
   export default function AppStack(props) {
     return (
       <Drawer.Navigator
@@ -109,6 +121,11 @@ function SellsStack(props) {
         <Drawer.Screen
           name="Sells"
           component={SellsStack}
+        />
+
+        <Drawer.Screen
+          name="Profile"
+          component={ProfileStack}
         />
       </Drawer.Navigator>
     );

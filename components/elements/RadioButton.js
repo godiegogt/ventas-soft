@@ -6,10 +6,10 @@ import { materialTheme } from '../../constants/'
 export const RadioButtonCustomers = ({ customers, valueSelected,selected}) => {
 	const [value, setvalue] = React.useState('');
 
-	React.useEffect(() => {
-		console.log('Se cambio el cliente');
-	console.log(selected);
-	}, [selected])
+	// React.useEffect(() => {
+	// 	console.log('Se cambio el cliente');
+	// console.log(selected);
+	// }, [selected])
 
 
 	return (
