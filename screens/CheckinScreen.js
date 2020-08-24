@@ -192,7 +192,7 @@ const CheckinScreen = ({navigation}) => {
             <ScrollView style={styles.card}>
 
                 <SearchBar
-                    placeholder="NIT"
+                    placeholder="Nombre del cliente"
                     containerStyle={{ width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' }}
                     onChangeText={(search)=>searchfunction(search)}
                     inputStyle={{ color: '#777', fontSize: 16 }}
